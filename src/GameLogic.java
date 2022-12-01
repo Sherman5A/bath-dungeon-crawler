@@ -10,9 +10,9 @@ public class GameLogic {
 	/**
 	 * Default constructor
 	 */
-	public GameLogic() {
-		map = new Map();
-	}
+//	public GameLogic() {
+//		map = new Map();
+//	}
 
     /**
 	 * Checks if the game is running
