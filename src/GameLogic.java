@@ -1,6 +1,5 @@
 /**
  * Contains the main logic part of the game, as it processes.
- *
  */
 public class GameLogic {
 	
@@ -15,8 +14,7 @@ public class GameLogic {
 //	}
 
     /**
-	 * Checks if the game is running
-	 *
+	 * Checks if the game is running.
      * @return if the game is running.
      */
     public boolean gameRunning() {
@@ -25,16 +23,13 @@ public class GameLogic {
 
     /**
 	 * Returns the gold required to win.
-	 *
      * @return : Gold required to win.
      */
     public String hello() {
         return null;
     }
-	
 
-	
-	
+
 	public static void main(String[] args) {
 		GameLogic logic = new GameLogic();
     }
