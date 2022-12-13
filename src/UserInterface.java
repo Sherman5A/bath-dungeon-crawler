@@ -1,9 +1,10 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class UserInterface {
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public UserInterface(Scanner scanner) {
         this.scanner = scanner;
@@ -11,12 +12,23 @@ public class UserInterface {
 
     /**
      * Prints the nested map formatted as multiline string
-     * @param mapOutput Nested ArrayList to print
+     *
+     * @param mapArray Nested ArrayList to print
      */
-    public static void printMap(ArrayList<ArrayList<String>> mapOutput) {
-        for (ArrayList<String> row : mapOutput) {
+    public static void printMap(ArrayList<ArrayList<String>> mapArray) {
+        for (ArrayList<String> row : mapArray) {
             System.out.println(String.join("", row));
         }
+        System.out.println();
+    }
+
+    public static void printMap(ArrayList<ArrayList<String>> mapArray, HashMap<String, Integer> coordinates) {
+
+    }
+
+    public static void displayMapInfo(Map map) {
+        System.out.println("Map name: " + map.getMapName());
+        System.out.println("Gold required to win: " + map.getGoldRequired() + "\n");
     }
 
     /**
@@ -25,8 +37,9 @@ public class UserInterface {
      * @return Object of MapFile that allows reading, editing of user's
      * selected map file.
      */
-    public MapFile chooseMap() {
+    public Map chooseMap() {
         String fileToRead;
+        MapFile readMapFile;
 
         while (true) {
             System.out.println("""
@@ -38,7 +51,7 @@ public class UserInterface {
 
             switch (mapFile) {
                 case "1" -> {
-                    System.out.println("Small map selected");
+                    System.out.println("Small map selected:\n");
                     fileToRead = "example-maps/small_example_map.txt";
                 }
                 case "2" -> {
@@ -47,7 +60,7 @@ public class UserInterface {
                 }
                 case "3" -> {
                     System.out.println("Large");
-                    fileToRead = "example_maps/large_example_map.txt";
+                    fileToRead = "example-maps/large_example_map.txt";
                 }
                 default -> {
                     System.out.println("Incorrect map");
@@ -55,10 +68,18 @@ public class UserInterface {
                 }
             }
             try {
-                return new MapFile(fileToRead);
+                readMapFile = new MapFile(fileToRead);
+                break;
             } catch (IOException e) {
                 System.out.println("File does not exist.");
             }
+        }
+        try {
+            return readMapFile.getMapFromFile();
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("File error:" + e);
+            return this.chooseMap();
         }
     }
 
@@ -94,4 +115,6 @@ public class UserInterface {
             }
         }
     }
+
+    // Make bot loop??
 }

@@ -4,14 +4,13 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        UserInterface userInterface = new UserInterface(scanner);
-        MapFile mapRead = userInterface.chooseMap();
-        try {
-            Map gameMap = mapRead.readFile();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e);
-        }
-//        UserInterface.printMap(gameMap.getMap());
-        userInterface.userLoop();
+        UserInterface userInput = new UserInterface(scanner);
+        Map gameMap = userInput.chooseMap();
+
+        UserInterface.printMap(gameMap.getMap());
+        UserInterface.displayMapInfo(gameMap);
+        Person player = new Person(gameMap);
+        userInput.userLoop();
+
     }
 }
