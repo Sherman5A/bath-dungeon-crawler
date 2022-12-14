@@ -8,11 +8,8 @@ public class Main {
         GameMap gameMap = userInput.chooseMap();
 
         UserInterface.printMap(gameMap.getMap());
-        UserInterface.displayMapInfo(gameMap);
         Person player = new Person(gameMap);
-        System.out.println(player.getCoordinates());
-        UserInterface.printMap(gameMap.getMap(), player.getCoordinates());
-        userInput.userLoop();
+        userInput.userLoop(player, gameMap);
 
     }
 }

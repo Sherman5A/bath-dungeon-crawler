@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class Person {
     private final GameMap gameMap;
+    private int numGold;
     // Person coordinates
     private HashMap<String, Integer> coordinates = new HashMap<String, Integer>();
     // Person gold
@@ -12,6 +13,7 @@ public class Person {
 
     public Person(GameMap gameMap) {
         this.gameMap = gameMap;
+        this.numGold = 0;
         spawnPerson();
     }
 
@@ -28,26 +30,38 @@ public class Person {
         }
     }
 
+    // TODO: add throws for better error messages
     public Boolean move(String direction) {
         HashMap<String, Integer> testCoordinates = new HashMap<String, Integer>(this.coordinates);
         switch (direction) {
-            case "N" -> testCoordinates.put("y", testCoordinates.get("y") + 1);
-            case "S" -> testCoordinates.put("y", testCoordinates.get("y") - 1);
+            case "N" -> testCoordinates.put("y", testCoordinates.get("y") - 1);
+            case "S" -> testCoordinates.put("y", testCoordinates.get("y") + 1);
             case "E" -> testCoordinates.put("x", testCoordinates.get("x") + 1);
             case "W" -> testCoordinates.put("x", testCoordinates.get("x") - 1);
+            // TODO: add throw here
         }
         boolean coordinatesValid = this.gameMap.checkTile(testCoordinates, "#");
         if (coordinatesValid) {
             this.coordinates = testCoordinates;
-            testCoordinates.clear();
             return true;
         }
         testCoordinates.clear();
         return false;
     }
 
+    public Boolean pickUpGold() {
+        if (gameMap.checkTile(this.coordinates, "G")) return false;
+        this.numGold++;
+        gameMap.consumeTile(this.coordinates);
+        return true;
+    }
+
     public HashMap<String, Integer> getCoordinates() {
         return this.coordinates;
+    }
+
+    public int getNumGold() {
+        return numGold;
     }
 
     // Move Person
