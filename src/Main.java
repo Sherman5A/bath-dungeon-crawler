@@ -6,8 +6,6 @@ public class Main {
 
         UserInterface userInput = new UserInterface(scanner);
         GameMap gameMap = userInput.chooseMap();
-
-        UserInterface.printMap(gameMap.getMap());
         Person player = new Person(gameMap);
         userInput.userLoop(player, gameMap);
 

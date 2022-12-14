@@ -4,15 +4,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+
+/**
+ * Class that handles reading the map file and creating the map class with the correctly formatted arguments.
+ */
 public class MapFile {
     private final Scanner fileScan;
 
+
+    /**
+     * Constructor for the class.
+     * @param fileToRead The file to read that contains the map
+     * @throws IOException Throws if the given file is not found.
+     */
     public MapFile(String fileToRead) throws IOException {
 
         this.fileScan = new Scanner(Paths.get(fileToRead));
     }
 
-    // Read the file that was created
+    /**
+     * Returns the map from the file. Handling parsing the map and converting it to a list. Grabs the data from the
+     * file, e.g the gold required and the name.
+     * @return Returns the new constructed GameMap class created from the file that was read
+     * @throws IllegalArgumentException Thrown if the name and gold data is not present in the given file.
+     */
     public GameMap getMapFromFile() throws IllegalArgumentException {
         int goldRequired = -1;
         String tableName = null;
