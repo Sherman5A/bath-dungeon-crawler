@@ -4,13 +4,13 @@
 public class GameLogic {
 	
 	/* Reference to the map being used */
-	private Map map;
+	private GameMap map;
 	
 	/**
 	 * Default constructor
 	 */
 //	public GameLogic() {
-//		map = new Map();
+//		map = new GameMap();
 //	}
 
     /**

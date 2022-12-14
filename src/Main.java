@@ -5,11 +5,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         UserInterface userInput = new UserInterface(scanner);
-        Map gameMap = userInput.chooseMap();
+        GameMap gameMap = userInput.chooseMap();
 
         UserInterface.printMap(gameMap.getMap());
         UserInterface.displayMapInfo(gameMap);
         Person player = new Person(gameMap);
+        System.out.println(player.getCoordinates());
+        UserInterface.printMap(gameMap.getMap(), player.getCoordinates());
         userInput.userLoop();
 
     }

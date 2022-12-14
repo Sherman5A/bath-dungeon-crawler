@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -22,12 +23,32 @@ public class UserInterface {
         System.out.println();
     }
 
-    public static void printMap(ArrayList<ArrayList<String>> mapArray, HashMap<String, Integer> coordinates) {
+    // TODO: put in bot coordinates
+    public static void printMap(ArrayList<ArrayList<String>> mapArray, HashMap<String, Integer> playerCoords) {
+       int[] x_bound = new int[]{playerCoords.get("x") - 2, playerCoords.get("x") + 3};
+       int[] y_bound = new int[]{playerCoords.get("y") - 2, playerCoords.get("y") + 3};
+        System.out.println(Arrays.toString(x_bound));
+        System.out.println(Arrays.toString(y_bound));
 
+        for (int i = y_bound[0]; i < y_bound[1]; i++) {
+            for (int j = x_bound[0]; j < x_bound[1]; j++) {
+                if (i == playerCoords.get("y") && j == playerCoords.get("x")) {
+                    System.out.print("P");
+                    continue;
+                }
+                try {
+                    // System.out.printf("%d %d %s - ", j, i, mapArray.get(i).get(j)); For debugging
+                    System.out.print(mapArray.get(i).get(j));
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.print("#");
+                }
+            }
+            System.out.println();
+        }
     }
 
-    public static void displayMapInfo(Map map) {
-        System.out.println("Map name: " + map.getMapName());
+    public static void displayMapInfo(GameMap map) {
+        System.out.println("GameMap name: " + map.getMapName());
         System.out.println("Gold required to win: " + map.getGoldRequired() + "\n");
     }
 
@@ -37,16 +58,16 @@ public class UserInterface {
      * @return Object of MapFile that allows reading, editing of user's
      * selected map file.
      */
-    public Map chooseMap() {
+    public GameMap chooseMap() {
         String fileToRead;
         MapFile readMapFile;
 
         while (true) {
             System.out.println("""
                     Select a map:
-                    1 - Small Map
-                    2 - Medium Map
-                    3 - Large Map""");
+                    1 - Small GameMap
+                    2 - Medium GameMap
+                    3 - Large GameMap""");
             String mapFile = scanner.nextLine();
 
             switch (mapFile) {

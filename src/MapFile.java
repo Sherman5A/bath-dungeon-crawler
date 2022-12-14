@@ -13,7 +13,7 @@ public class MapFile {
     }
 
     // Read the file that was created
-    public Map getMapFromFile() throws IllegalArgumentException {
+    public GameMap getMapFromFile() throws IllegalArgumentException {
         int goldRequired = -1;
         String tableName = null;
         ArrayList<ArrayList<String>> gameMap = new ArrayList<ArrayList<String>>();
@@ -47,6 +47,6 @@ public class MapFile {
         if (tableName == null) {
             throw new IllegalArgumentException("No table name in file");
         }
-        return new Map(tableName, goldRequired, gameMap);
+        return new GameMap(tableName, goldRequired, gameMap);
     }
 }

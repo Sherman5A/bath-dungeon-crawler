@@ -4,7 +4,7 @@ import java.util.HashMap;
 /**
  * Reads and contains in memory the map of the game.
  */
-public class Map {
+public class GameMap {
 
     /* Representation of the map */
 //	private char[][] map;
@@ -12,7 +12,7 @@ public class Map {
     private final ArrayList<ArrayList<String>> map;
 
 
-    /* Map name */
+    /* GameMap name */
     private final String mapName;
 
     /* Gold required for the human player to win */
@@ -24,7 +24,7 @@ public class Map {
     /**
      * Default constructor, creates the default map "Very small Labyrinth of doom".
      */
-//	public Map() {
+//	public GameMap() {
 //		mapName = "Very small Labyrinth of Doom";
 //		goldRequired = 2;
 //		map = new char[][]{
@@ -45,32 +45,41 @@ public class Map {
      *
      * @param : The filename of the map file.
      */
-//	public Map(String fileName) {
+//	public GameMap(String fileName) {
 //		readMap(fileName);
 //	}
-    public Map(String mapName, int goldRequired, ArrayList<ArrayList<String>> mapList) throws IllegalArgumentException {
+    public GameMap(String mapName, int goldRequired, ArrayList<ArrayList<String>> mapList)
+            throws IllegalArgumentException {
         this.mapName = mapName;
         this.goldRequired = goldRequired;
         this.map = mapList;
     }
 
     public boolean checkTile(HashMap<String, Integer> coordinates) {
+        if (!checkTileBounds(coordinates)) return false;
         String spawnTile = this.map.get(coordinates.get("y")).get(coordinates.get("x"));
         return !spawnTile.equals("G") && !spawnTile.equals("#");
     }
 
     public boolean checkTile(HashMap<String, Integer> coordinates, String whichTile) {
+        if (!checkTileBounds(coordinates)) return false;
         return this.map.get(coordinates.get("y")).get(coordinates.get("x")).equals(whichTile);
     }
 
+    // TODO: implement this so that you cannot get bounds outside of the array
+    // Check in event that the map does not have any borders
+    private boolean checkTileBounds(HashMap<String, Integer> coordinates) {
+        int yLength = map.size() - 1 ;
+        int xLength = map.get(0).size() - 1;
+        return ((coordinates.get("y") < yLength && coordinates.get("y") > 0) ||
+                (coordinates.get("x") < xLength && coordinates.get("x") > 0));
+    }
 
-
-
-
+    
     /* Players should not directly interact with map, and the strings in the map.
      * Therefore, the coordinates of map items will be placed in arrays at the start
      * of the game and passed to required classes. This achieves separation of
-     * implementation between the Map and Person classes. */
+     * implementation between the GameMap and Person classes. */
 //    private void parseMapData() {
 //        // Get walls
 //        this.wallLocations = new ArrayList<ArrayList<Integer>>();
