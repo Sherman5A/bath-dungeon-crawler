@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+/**
+ * Starts up required classes and loops
+ */
 public class Main {
     public static void main(String[] args) {
 

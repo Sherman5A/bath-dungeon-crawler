@@ -9,6 +9,10 @@ import java.util.Scanner;
 public class UserInterface {
     private final Scanner scanner;
 
+    /**
+     * Constructor for UserInterface
+     * @param scanner Scanner for user / file input
+     */
     public UserInterface(Scanner scanner) {
         this.scanner = scanner;
     }
@@ -121,7 +125,9 @@ public class UserInterface {
      * The loop for handling user input once the game has begun.
      *
      * @param player  Person instance to perform movement, etc. on
+     * @param bot Instance of bot to check its coordinates
      * @param gameMap Game map to use as the environment
+     * @param botControl BotControl instance to execute bots turn.
      */
     public void userLoop(Person player, Person bot, GameMap gameMap, BotHandler botControl) {
 
