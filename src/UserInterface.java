@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-
 /**
  * Class that handles user input and output.
  */
@@ -20,49 +19,54 @@ public class UserInterface {
      * @param mapArray Nested ArrayList to print
      */
     public static void printMap(ArrayList<ArrayList<String>> mapArray) {
+
         for (ArrayList<String> row : mapArray) {
             System.out.println(String.join("", row));
         }
         System.out.println();
     }
 
-    /**
-     * Prints a 5x5 grid of the map around the given person
-     *
-     * @param mapArray     Nested array to print
-     * @param playerCoords The coordinates to print the 5x5 array around.
-     */
-    // TODO: put in bot coordinates
-    public static void printMap(ArrayList<ArrayList<String>> mapArray, HashMap<String, Integer> playerCoords) {
+    public static ArrayList<ArrayList<String>> getLocalArray(ArrayList<ArrayList<String>> mapArray,
+                                                             HashMap<String, Integer> centerCoordinates,
+                                                             HashMap<String, Integer> otherPersonCoordinates) {
         /* Gets the required indexes to iterate through to print a 5x5 grid around the coordinates
          * Two values, the lower bound (for x: left side, for y: top of grid),
          * and upper bound (for x: right side, for y: bottom of grid)
          */
-        int[] x_bound = new int[]{playerCoords.get("x") - 2, playerCoords.get("x") + 3};
-        int[] y_bound = new int[]{playerCoords.get("y") - 2, playerCoords.get("y") + 3};
-
+        int[] x_bound = new int[]{centerCoordinates.get("x") - 2, centerCoordinates.get("x") + 3};
+        int[] y_bound = new int[]{centerCoordinates.get("y") - 2, centerCoordinates.get("y") + 3};
+        ArrayList<ArrayList<String>> localArray = new ArrayList<ArrayList<String>>();
         // Iterate from top to bottom of 5x5 grid.
+        int count = 0;
         for (int i = y_bound[0]; i < y_bound[1]; i++) {
+            localArray.add(new ArrayList<String>());
+//            System.out.println(localArray);
             // On each row of the grid, print 5 tiles from the GameMap array from the lower to upper x bound
             for (int j = x_bound[0]; j < x_bound[1]; j++) {
                 // If current tile coordinates match the player's coordinates then place the player tile instead of
                 // the tile on the map.
-                if (i == playerCoords.get("y") && j == playerCoords.get("x")) {
-                    System.out.print("P");
+
+                if (i == otherPersonCoordinates.get("y") && j == otherPersonCoordinates.get("x")) {
+                    localArray.get(count).add("B");
+                    continue;
+                } else if (i == centerCoordinates.get("y") && j == centerCoordinates.get("x")) {
+                    localArray.get(count).add("P");
                     continue;
                 }
+
                 // Otherwise, print the typical tile in the array.
                 try {
                     // System.out.printf("%d %d %s - ", j, i, mapArray.get(i).get(j)); For debugging
-                    System.out.print(mapArray.get(i).get(j));
+                    localArray.get(count).add(mapArray.get(i).get(j));
                     // If we go past the map's area, then print #s
                 } catch (IndexOutOfBoundsException e) {
-                    System.out.print("#");
+                    localArray.get(count).add("#");
                 }
             }
+            count++;
             // Print a linebreak to separate the rows.
-            System.out.println();
         }
+        return localArray;
     }
 
     /**
@@ -72,35 +76,11 @@ public class UserInterface {
      * selected map file.
      */
     public GameMap chooseMap() {
-        String fileToRead;
         MapFile readMapFile;
 
         while (true) {
-            System.out.println("""
-                    Select a map:
-                    1 - Small GameMap
-                    2 - Medium GameMap
-                    3 - Large GameMap""");
-            String mapFile = scanner.nextLine();
-
-            switch (mapFile) {
-                case "1" -> {
-                    System.out.println("Small map selected:");
-                    fileToRead = "example-maps/small_example_map.txt";
-                }
-                case "2" -> {
-                    System.out.println("Medium");
-                    fileToRead = "example-maps/medium_example_map.txt";
-                }
-                case "3" -> {
-                    System.out.println("Large");
-                    fileToRead = "example-maps/large_example_map.txt";
-                }
-                default -> {
-                    System.out.println("Incorrect map");
-                    continue;
-                }
-            }
+            System.out.println("Enter relative path:");
+            String fileToRead = scanner.nextLine();
             try {
                 readMapFile = new MapFile(fileToRead);
                 break;
@@ -115,16 +95,23 @@ public class UserInterface {
             return this.chooseMap();
         }
     }
-
     /**
      * The loop for handling user input once the game has begun.
      *
      * @param player  Person instance to perform movement, etc. on
      * @param gameMap Game map to use as the environment
      */
-    public void userLoop(Person player, GameMap gameMap) {
+    public void userLoop(Person player, Person bot, GameMap gameMap, BotHandler botControl) {
+
         scannerLoop:
         while (true) {
+
+            if (player.getCoordinates().equals(bot.getCoordinates())) {
+                printMap(getLocalArray(gameMap.getMap(), player.getCoordinates(), bot.getCoordinates()));
+                System.out.println("Fail");
+                break scannerLoop;
+            }
+
             System.out.println("Enter a command:");
             String userCommand = scanner.next();
             switch (userCommand) {
@@ -152,7 +139,7 @@ public class UserInterface {
                     }
                 }
                 case "LOOK" -> {
-                    printMap(gameMap.getMap(), player.getCoordinates());
+                    printMap(getLocalArray(gameMap.getMap(), player.getCoordinates(), bot.getCoordinates()));
                 }
                 case "QUIT" -> {
                     // If the player is on an exit tile, and enough gold, then print the winning message. Print the
@@ -161,8 +148,12 @@ public class UserInterface {
                     break scannerLoop;
                 }
                 // If command is unrecognised:
-                default -> System.out.println("Incorrect command");
+                default -> {
+                    System.out.println("Incorrect command");
+                }
+
             }
+            botControl.botTurn();
         }
     }
 }

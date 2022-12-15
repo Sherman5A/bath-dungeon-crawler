@@ -7,7 +7,8 @@ public class Main {
         UserInterface userInput = new UserInterface(scanner);
         GameMap gameMap = userInput.chooseMap();
         Person player = new Person(gameMap);
-        userInput.userLoop(player, gameMap);
-
+        Person bot = new Person(gameMap);
+        BotHandler botControl = new BotHandler(gameMap, bot, player);
+        userInput.userLoop(player, bot, gameMap, botControl);
     }
 }

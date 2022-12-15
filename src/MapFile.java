@@ -21,18 +21,18 @@ public class MapFile {
 
         this.fileScan = new Scanner(Paths.get(fileToRead));
     }
-
     /**
      * Returns the map from the file. Handling parsing the map and converting it to a list. Grabs the data from the
-     * file, e.g the gold required and the name.
+     * file, e.g. the gold required and the name.
      * @return Returns the new constructed GameMap class created from the file that was read
      * @throws IllegalArgumentException Thrown if the name and gold data is not present in the given file.
      */
     public GameMap getMapFromFile() throws IllegalArgumentException {
         int goldRequired = -1;
+        int count = 0;
         String tableName = null;
         ArrayList<ArrayList<String>> gameMap = new ArrayList<ArrayList<String>>();
-        int count = 0;
+
         while (fileScan.hasNextLine()) {
 
             String row = fileScan.nextLine();
@@ -54,6 +54,7 @@ public class MapFile {
             }
             parseRow.close();
         }
+
         fileScan.close();
 
         if (goldRequired == -1) {
@@ -62,6 +63,7 @@ public class MapFile {
         if (tableName == null) {
             throw new IllegalArgumentException("No table name in file");
         }
+
         return new GameMap(tableName, goldRequired, gameMap);
     }
 }
