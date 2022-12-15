@@ -4,11 +4,11 @@ public class BotHandler {
     private final GameMap gameMap;
     private final Person bot;
     private final Person player;
+    private final HashMap<String, Integer> playerCoordinates;
+    private final HashMap<String, Integer> goldCoordinates;
+    private final Set<String> invalidDirections;
     private ArrayList<ArrayList<String>> mapMemory;
     private HashMap<String, Integer> lastLookCoordinates;
-    private HashMap<String, Integer> playerCoordinates;
-    private HashMap<String, Integer> goldCoordinates;
-    private Set<String> invalidDirections;
     private int numMoves;
 
     public BotHandler(GameMap gameMap, Person bot, Person player) {
@@ -59,9 +59,9 @@ public class BotHandler {
         numMoves++;
     }
 
-//    private void pickUp()
+    //    private void pickUp()
     private void moveBot(HashMap<String, Integer> desiredCoordinates) {
-        int [] coordinateDifference = {desiredCoordinates.get("x") - bot.getCoordinates().get("x"),
+        int[] coordinateDifference = {desiredCoordinates.get("x") - bot.getCoordinates().get("x"),
                 bot.getCoordinates().get("y") - desiredCoordinates.get("y")};
 
         ArrayList<String> directionToTake = coordinatesToDirections(coordinateDifference);

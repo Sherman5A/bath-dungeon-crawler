@@ -29,10 +29,12 @@ public class UserInterface {
     public static ArrayList<ArrayList<String>> getLocalArray(ArrayList<ArrayList<String>> mapArray,
                                                              HashMap<String, Integer> centerCoordinates,
                                                              HashMap<String, Integer> otherPersonCoordinates) {
+
         /* Gets the required indexes to iterate through to print a 5x5 grid around the coordinates
          * Two values, the lower bound (for x: left side, for y: top of grid),
          * and upper bound (for x: right side, for y: bottom of grid)
          */
+
         int[] x_bound = new int[]{centerCoordinates.get("x") - 2, centerCoordinates.get("x") + 3};
         int[] y_bound = new int[]{centerCoordinates.get("y") - 2, centerCoordinates.get("y") + 3};
         ArrayList<ArrayList<String>> localArray = new ArrayList<ArrayList<String>>();
@@ -40,7 +42,6 @@ public class UserInterface {
         int count = 0;
         for (int i = y_bound[0]; i < y_bound[1]; i++) {
             localArray.add(new ArrayList<String>());
-//            System.out.println(localArray);
             // On each row of the grid, print 5 tiles from the GameMap array from the lower to upper x bound
             for (int j = x_bound[0]; j < x_bound[1]; j++) {
                 // If current tile coordinates match the player's coordinates then place the player tile instead of
@@ -95,6 +96,7 @@ public class UserInterface {
             return this.chooseMap();
         }
     }
+
     /**
      * The loop for handling user input once the game has begun.
      *
@@ -109,7 +111,7 @@ public class UserInterface {
             if (player.getCoordinates().equals(bot.getCoordinates())) {
                 printMap(getLocalArray(gameMap.getMap(), player.getCoordinates(), bot.getCoordinates()));
                 System.out.println("Fail");
-                break scannerLoop;
+                break;
             }
 
             System.out.println("Enter a command:");
