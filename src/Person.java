@@ -6,6 +6,7 @@ import java.util.Random;
  * Class that represents the things in the game that can move and collect items.
  */
 public class Person {
+
     private final GameMap gameMap;
     /**
      * Amount of gold the person has.
@@ -24,7 +25,7 @@ public class Person {
      */
     public Person(GameMap gameMap) {
         this.gameMap = gameMap;
-        this.numGold = 2;
+        this.numGold = 0;
         spawnPerson();
     }
 
@@ -44,7 +45,6 @@ public class Person {
         }
     }
 
-
     /**
      * Moves the person in one of 4 cardinal directions. Prevents person from walking through walls and off the array
      *
@@ -55,6 +55,7 @@ public class Person {
      */
     public void move(String direction) throws IllegalArgumentException, Error {
         HashMap<String, Integer> testCoordinates = new HashMap<String, Integer>(this.coordinates);
+        // Change the coordinates by a certian value depending on the direction.
         switch (direction) {
             case "N" -> testCoordinates.put("y", testCoordinates.get("y") - 1);
             case "S" -> testCoordinates.put("y", testCoordinates.get("y") + 1);
@@ -62,12 +63,16 @@ public class Person {
             case "W" -> testCoordinates.put("x", testCoordinates.get("x") - 1);
             default -> throw new IllegalArgumentException("Invalid direction given");
         }
+        // Test if the new coordinates are valid.
         boolean coordinatesValid = !this.gameMap.checkTile(testCoordinates, "#");
         if (coordinatesValid) {
+            // If they are valid, assign them to the real coordinates.
             this.coordinates = testCoordinates;
             return;
         }
+        // Clear test coordinates if invalid as no longer needed.
         testCoordinates.clear();
+        // If invalid, throw error so UserInterface can inform user.
         throw new Error("Can't enter walls");
     }
 
@@ -77,6 +82,7 @@ public class Person {
      * @return Bool for game quit outcome. Depends on whether person is on exit tile and has enough gold.
      */
     public boolean quitGame() {
+        // Check for exit tile, and that the person has enough gold.
         return gameMap.checkTile(this.coordinates, "E") && this.numGold >= gameMap.getNumGoldRequired();
     }
 
@@ -87,8 +93,10 @@ public class Person {
      * @return Returns true if gold was successfully picked up
      */
     public boolean pickUpGold() {
+        // If the player is not on the correct tile, return false.
         if (!gameMap.checkTile(this.coordinates, "G")) return false;
         this.numGold++;
+        // Replace the gold tile with an empty tile (".").
         gameMap.consumeTile(this.coordinates);
         return true;
     }

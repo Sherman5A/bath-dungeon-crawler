@@ -26,6 +26,24 @@ public class UserInterface {
         System.out.println();
     }
 
+    /**
+     * Called when the bot exits with enough gold, causing the player to
+     * lose the game.
+     */
+    public static void botExit() {
+        System.out.println("Lose");
+        System.out.println("Bot exited successfully");
+        System.exit(0);
+    }
+
+    /**
+     * Returns a 5x5 array around the given person with the lable "P". The other person is rendered as a bot with the tile
+     * lable "B".
+     * @param mapArray The map to use to print the tile information
+     * @param centerCoordinates The coordinates to center the map around and to use as the player tile.
+     * @param otherPersonCoordinates The coordinates to render as a bot, if present.
+     * @return Nested array of the 5x5 grid.
+     */
     public static ArrayList<ArrayList<String>> getLocalArray(ArrayList<ArrayList<String>> mapArray,
                                                              HashMap<String, Integer> centerCoordinates,
                                                              HashMap<String, Integer> otherPersonCoordinates) {
@@ -34,7 +52,6 @@ public class UserInterface {
          * Two values, the lower bound (for x: left side, for y: top of grid),
          * and upper bound (for x: right side, for y: bottom of grid)
          */
-
         int[] x_bound = new int[]{centerCoordinates.get("x") - 2, centerCoordinates.get("x") + 3};
         int[] y_bound = new int[]{centerCoordinates.get("y") - 2, centerCoordinates.get("y") + 3};
         ArrayList<ArrayList<String>> localArray = new ArrayList<ArrayList<String>>();
@@ -93,6 +110,8 @@ public class UserInterface {
             return readMapFile.getMapFromFile();
         } catch (IllegalArgumentException e) {
             System.out.println("File error:" + e);
+            // Recursively ask for a new file if the format is incorrect
+            // or if data is missing.
             return this.chooseMap();
         }
     }
@@ -107,22 +126,27 @@ public class UserInterface {
 
         scannerLoop:
         while (true) {
-
+            
+            // Player loses if the bots coordinates match the players coordinates.
             if (player.getCoordinates().equals(bot.getCoordinates())) {
                 printMap(getLocalArray(gameMap.getMap(), player.getCoordinates(), bot.getCoordinates()));
                 System.out.println("Fail");
                 break;
             }
 
+            // Request the player to enter a command.
             System.out.println("Enter a command:");
             String userCommand = scanner.next();
             switch (userCommand) {
+                // Prints gold required to win the game.
                 case "HELLO" -> {
                     System.out.printf("Gold to win: %d\n", gameMap.getNumGoldRequired());
                 }
+                // Prints the player's gold.
                 case "GOLD" -> {
                     System.out.printf("Gold owned: %d\n", player.getNumGold());
                 }
+                // Pickup gold if on correct tile.
                 case "PICKUP" -> {
                     System.out.println("Pickup");
                     boolean outcome = player.pickUpGold();
@@ -130,6 +154,7 @@ public class UserInterface {
                         System.out.printf("Success. Gold owned: %d\n", player.getNumGold());
                     } else System.out.println("Fail");
                 }
+                // Move in a given direction.
                 case "MOVE" -> {
                     String direction = scanner.next().substring(0, 1);
                     try {
@@ -140,9 +165,11 @@ public class UserInterface {
                         System.out.println("Fail");
                     }
                 }
+                // Generate and print a 5x5 map around the player.
                 case "LOOK" -> {
                     printMap(getLocalArray(gameMap.getMap(), player.getCoordinates(), bot.getCoordinates()));
                 }
+                // Quit the game.
                 case "QUIT" -> {
                     // If the player is on an exit tile, and enough gold, then print the winning message. Print the
                     // fail message otherwise
@@ -153,8 +180,8 @@ public class UserInterface {
                 default -> {
                     System.out.println("Incorrect command");
                 }
-
             }
+            // Execute the bot's turn.
             botControl.botTurn();
         }
     }

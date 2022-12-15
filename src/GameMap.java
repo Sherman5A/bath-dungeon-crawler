@@ -41,6 +41,7 @@ public class GameMap {
     private boolean coordinatesOutOfBounds(HashMap<String, Integer> coordinates) {
         int yLength = map.size() - 1;
         int xLength = map.get(0).size() - 1;
+        // Checks if the coordinates are out of the map's range.
         return ((coordinates.get("y") >= yLength || coordinates.get("y") <= 0) ||
                 (coordinates.get("x") >= xLength || coordinates.get("x") <= 0));
     }
@@ -50,7 +51,7 @@ public class GameMap {
      * Checks the given tile for gold and walls as the player can not spawn on them tiles
      *
      * @param coordinates Coordinates to check
-     * @return Returns whether it is valid to spawn on the given coordinates. True is allowed. False is not.
+     * @return Returns whether it is valid to spawn on the given coordinates. True is not allowed. False is allowed.
      */
     public boolean checkTile(HashMap<String, Integer> coordinates) {
         if (coordinatesOutOfBounds(coordinates)) return true;
@@ -67,6 +68,7 @@ public class GameMap {
      */
     public boolean checkTile(HashMap<String, Integer> coordinates, String whichTile) {
         if (coordinatesOutOfBounds(coordinates)) return true;
+        // Check for specific tile.
         return whichTile.equals(this.map.get(coordinates.get("y")).get(coordinates.get("x")));
     }
 
