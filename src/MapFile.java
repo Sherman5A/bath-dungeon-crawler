@@ -43,7 +43,7 @@ public class MapFile {
             }
             // Create a scanner dedicated to scanning each row for map data.
             Scanner parseRow = new Scanner(row);
-            
+
             // Handle the map data in the file.
             switch (parseRow.next()) {
                 case "name" -> {
@@ -63,7 +63,7 @@ public class MapFile {
         }
         // Close the scanner for reading file as no need for it.
         fileScan.close();
-        
+
         // If the name / gold data was not in the file, force the user to choose another file.
         if (goldRequired == -1) {
             throw new IllegalArgumentException("No win condition in file");

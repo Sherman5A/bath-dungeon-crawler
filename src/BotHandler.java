@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
  * Determines what inputs the bot should take in the game
- */ 
+ */
 public class BotHandler {
 
     private final GameMap gameMap;
@@ -11,23 +11,31 @@ public class BotHandler {
     private final HashMap<String, Integer> playerCoordinates;
     private final HashMap<String, Integer> goldCoordinates;
     private final HashMap<String, Integer> exitCoordinates;
-    /** Directions that the bot remembers that have walls, generated when bot looks. 
-      * Using set to prevent duplicate values. 
-      */
+    /**
+     * Directions that the bot remembers that have walls, generated when bot looks.
+     * Using set to prevent duplicate values.
+     */
     private final Set<String> invalidDirections;
-    /** Bot's memory of the map it last looked at. */
+    /**
+     * Bots memory of the map it last looked at.
+     */
     private ArrayList<ArrayList<String>> mapMemory;
-    /** Coordiantes of the bot when it last looked at the map. */
+    /**
+     * Coordinates of the bot when it last looked at the map.
+     */
     private HashMap<String, Integer> lastLookCoordinates;
-    /** Number of moves since last looking at the map. */
+    /**
+     * Number of moves since last looking at the map.
+     */
     private int numMoves;
 
-    /** 
+    /**
      * Constructor class for BotHandler.
+     *
      * @param gameMap Map of the game, used in look commands.
-     * @param bot Used for getting coordinates and performing actions on the bot.
-     * @param player Used for getting players coordinates.
-     */  
+     * @param bot     Used for getting coordinates and performing actions on the bot.
+     * @param player  Used for getting players coordinates.
+     */
     public BotHandler(GameMap gameMap, Person bot, Person player) {
         this.gameMap = gameMap;
         this.bot = bot;
@@ -39,7 +47,7 @@ public class BotHandler {
     }
 
     /**
-     * Handles the bot's turn, deciding which actions to do based on
+     * Handles the bots turn, deciding which actions to do based on
      * the data available to it.
      */
     public void botTurn() {
@@ -79,7 +87,7 @@ public class BotHandler {
             if (bot.getCoordinates().equals(goldCoordinates)) {
                 bot.pickUpGold();
                 goldCoordinates.clear();
-            // Otherwise try to move towards the tile.
+                // Otherwise try to move towards the tile.
             } else {
                 moveBot(goldCoordinates);
             }
@@ -104,9 +112,10 @@ public class BotHandler {
         // Increment number of moves.
         numMoves++;
     }
-    
+
     /**
      * Move bot towards given coordinates.
+     *
      * @param desiredCoordinates Coordinates that the bot needs to move towards
      */
     private void moveBot(HashMap<String, Integer> desiredCoordinates) {
@@ -116,7 +125,7 @@ public class BotHandler {
 
         // Convert the coordinates into directions to take.
         ArrayList<String> directionToTake = coordinatesToDirections(coordinateDifference);
-        for (String direction : directionToTake) { 
+        for (String direction : directionToTake) {
             try {
                 bot.move(direction);
                 numMoves++;
@@ -132,6 +141,7 @@ public class BotHandler {
     /**
      * Convert cartesian coordinates into a string of cardinal directions for the bot to
      * take.
+     *
      * @param coordinateDifference Coordinates to convert
      * @return String of cardinal directions, "N", "S", "E", "W".
      */
@@ -154,7 +164,7 @@ public class BotHandler {
         return directions;
     }
 
-    /** 
+    /**
      * Get the bot to look around the map and record the details of the environment
      * Records the coordinates of when the bot last looked for use in getting overall, not local coordinates.
      */
@@ -180,7 +190,7 @@ public class BotHandler {
             // Reset the xCounter on every new row.
             xCounter = -2;
             for (int j = 0; j < mapMemory.get(i).size(); j++) {
-                // B reperesents the player. Always record the player over gold and exits.
+                // B represents the player. Always record the player over gold and exits.
                 if (mapMemory.get(i).get(j).equals("B")) {
                     // Record the coordinates.
                     playerCoordinates.put("x", lastLookCoordinates.get("x") + xCounter);
@@ -207,7 +217,7 @@ public class BotHandler {
                      * invalid direction. */
                     if (direction[0] < 2 && direction[1] == 2) {
                         invalidDirections.add("W");
-                    // Vice-versa for east.
+                        // Vice-versa for east.
                     } else if (direction[0] > 2 && direction[1] == 2) {
                         invalidDirections.add("E");
                     }
@@ -215,7 +225,7 @@ public class BotHandler {
                      * invalid direction. */
                     if (direction[1] < 2 && direction[0] == 2) {
                         invalidDirections.add("N");
-                    // Vice-versa for south
+                        // Vice-versa for south
                     } else if (direction[1] > 2 && direction[0] == 2) {
                         invalidDirections.add("S");
                     }

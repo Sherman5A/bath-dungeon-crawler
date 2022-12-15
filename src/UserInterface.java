@@ -37,10 +37,11 @@ public class UserInterface {
     }
 
     /**
-     * Returns a 5x5 array around the given person with the lable "P". The other person is rendered as a bot with the tile
-     * lable "B".
-     * @param mapArray The map to use to print the tile information
-     * @param centerCoordinates The coordinates to center the map around and to use as the player tile.
+     * Returns a 5x5 array around the given person with the label "P". The other person is rendered as a bot with the tile
+     * label "B".
+     *
+     * @param mapArray               The map to use to print the tile information
+     * @param centerCoordinates      The coordinates to center the map around and to use as the player tile.
      * @param otherPersonCoordinates The coordinates to render as a bot, if present.
      * @return Nested array of the 5x5 grid.
      */
@@ -54,11 +55,11 @@ public class UserInterface {
          */
         int[] x_bound = new int[]{centerCoordinates.get("x") - 2, centerCoordinates.get("x") + 3};
         int[] y_bound = new int[]{centerCoordinates.get("y") - 2, centerCoordinates.get("y") + 3};
-        ArrayList<ArrayList<String>> localArray = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> localArray = new ArrayList<>();
         // Iterate from top to bottom of 5x5 grid.
         int count = 0;
         for (int i = y_bound[0]; i < y_bound[1]; i++) {
-            localArray.add(new ArrayList<String>());
+            localArray.add(new ArrayList<>());
             // On each row of the grid, print 5 tiles from the GameMap array from the lower to upper x bound
             for (int j = x_bound[0]; j < x_bound[1]; j++) {
                 // If current tile coordinates match the player's coordinates then place the player tile instead of
@@ -126,7 +127,7 @@ public class UserInterface {
 
         scannerLoop:
         while (true) {
-            
+
             // Player loses if the bots coordinates match the players coordinates.
             if (player.getCoordinates().equals(bot.getCoordinates())) {
                 printMap(getLocalArray(gameMap.getMap(), player.getCoordinates(), bot.getCoordinates()));
@@ -181,7 +182,7 @@ public class UserInterface {
                     System.out.println("Incorrect command");
                 }
             }
-            // Execute the bot's turn.
+            // Execute the bots turn.
             botControl.botTurn();
         }
     }
