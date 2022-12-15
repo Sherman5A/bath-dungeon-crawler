@@ -16,7 +16,7 @@ public class Person {
      * Hashmaps used as showing the "x" and "y" as keys improves readability compared to indexes [0] and [1]
      * in an array.
      */
-    private HashMap<String, Integer> coordinates = new HashMap<String, Integer>();
+    private HashMap<String, Integer> coordinates = new HashMap<>();
 
     /**
      * Constructor for Person class.
@@ -54,8 +54,8 @@ public class Person {
      * @throws Error                    Thrown when attempting to enter a wall.
      */
     public void move(String direction) throws IllegalArgumentException, Error {
-        HashMap<String, Integer> testCoordinates = new HashMap<String, Integer>(this.coordinates);
-        // Change the coordinates by a certian value depending on the direction.
+        HashMap<String, Integer> testCoordinates = new HashMap<>(this.coordinates);
+        // Change the coordinates by a certain value depending on the direction.
         switch (direction) {
             case "N" -> testCoordinates.put("y", testCoordinates.get("y") - 1);
             case "S" -> testCoordinates.put("y", testCoordinates.get("y") + 1);

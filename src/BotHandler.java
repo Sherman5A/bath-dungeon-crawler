@@ -51,16 +51,15 @@ public class BotHandler {
      * the data available to it.
      */
     public void botTurn() {
-        UserInterface.printMap(UserInterface.getLocalArray(gameMap.getMap(), bot.getCoordinates(), player.getCoordinates()));
         // Look around on first start.
         if (mapMemory == null) {
-            lookCommand();
+            lookMap();
             return;
         }
         // When the bot has moved several times look around to refresh
         // surroundings
         if (numMoves > 2) {
-            lookCommand();
+            lookMap();
             numMoves = 0;
             return;
         }
@@ -70,7 +69,6 @@ public class BotHandler {
             return;
         }
         // Try to exit the game if the bot has enough gold.
-        System.out.println(bot.getNumGold());
         if ((bot.getNumGold() == gameMap.getNumGoldRequired()) && !(exitCoordinates.isEmpty())) {
 
             if (bot.quitGame()) {
@@ -143,7 +141,7 @@ public class BotHandler {
      * take.
      *
      * @param coordinateDifference Coordinates to convert
-     * @return String of cardinal directions, "N", "S", "E", "W".
+     * @return List of cardinal directions, "N", "S", "E", "W".
      */
     private ArrayList<String> coordinatesToDirections(int[] coordinateDifference) {
         // ArrayList that stores the list of directions to take.
@@ -168,7 +166,7 @@ public class BotHandler {
      * Get the bot to look around the map and record the details of the environment
      * Records the coordinates of when the bot last looked for use in getting overall, not local coordinates.
      */
-    private void lookCommand() {
+    private void lookMap() {
         this.mapMemory = UserInterface.getLocalArray(gameMap.getMap(), bot.getCoordinates(), player.getCoordinates());
         this.lastLookCoordinates = bot.getCoordinates();
         parseLocalMap();
@@ -183,7 +181,7 @@ public class BotHandler {
         invalidDirections.clear();
         /* Set counters. Left and top tiles are -2 relative to the center of the local map so
          * this counter is set. */
-        int xCounter = -2;
+        int xCounter;
         int yCounter = -2;
         // Iterate through the nested local map.
         for (int i = 0; i < mapMemory.size(); i++) {
